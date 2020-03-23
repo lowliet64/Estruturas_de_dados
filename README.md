@@ -1,5 +1,6 @@
-# Estruturas_de_dados
+# Estruturas de dados
 ## Arvores
-   1.Árvore Binária de Pesquisa
-   1.Árvore AVL(Arvore Binária de Busca Balanceada)
-   1.Árvore Rubro-Negra
+
+- Árvore Binária de Pesquisa
+- Árvore Binária de pesquisa Balanceada
+- Ávore Rubro-Negra
