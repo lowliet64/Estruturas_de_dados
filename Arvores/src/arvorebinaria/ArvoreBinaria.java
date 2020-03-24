@@ -26,6 +26,11 @@ public class ArvoreBinaria {
         
          
          b.view();
+         
+         b.remove(16, root);
+         b.view();
+         b.remove(15, root);
+         b.view();
         
     }
 }

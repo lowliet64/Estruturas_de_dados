@@ -78,7 +78,7 @@ public class BinaryTree implements Tree{
 
     @Override
     public Node parent(Node n) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+      return n.getParent();
     }
 
     @Override
@@ -177,6 +177,62 @@ public class BinaryTree implements Tree{
         }
     }
     
+    public void remove(int key, Node n){
+        Node nodeout= find(key,root());
+        Node rc;//pegará o filho direito (Right Child)
+        Node lc;
+        Node nop;//nodeout Parent
+        Node lcr;//left child of right child of nodeout
+        //Caso tenha filho direito
+        if(isExternal(nodeout)){
+            nop=nodeout.getParent();
+            if(nodeout==nop.getLeftChild()){
+                nop.setLeftChild(null);
+                nodeout.setParent(null);
+            }else{
+                nop.setRightChild(null);
+                nodeout.setParent(null);
+            }
+        
+        }else{
+            nop=nodeout.getParent();
+            if(hasRightChild(nodeout)){
+                //caso tenha filho direito
+                rc=nodeout.getLeftChild();
+                
+               
+                if(hasLeftChild(rc)){
+                //caso o filho direito tenha filho esquerdo
+               
+                //altera o pai do filho esquerdo do rc
+                 rc.getLeftChild().setParent(nop);
+                 rc.setParent(rc.getLeftChild());
+                 rc.setLeftChild(null);
+                 
+                 //
+                 
+                }else{
+                
+                }
+           
+            
+            }else{
+                 //caso só tenha esquerdo
+                lc=nodeout.getLeftChild();
+                lc.setParent(nop);
+
+                if(nodeout==nop.getLeftChild()){
+                    nop.setLeftChild(lc);
+                    nodeout.setParent(null);
+                }else{
+                    nop.setRightChild(lc);
+                    nodeout.setParent(null);
+                }
+            }
+        }
+    }
+   
+    
     
    public ArrayList<Node> inOrder(Node n){
        if(values==null){
@@ -202,9 +258,13 @@ public class BinaryTree implements Tree{
    }
    
    public void view(){
-       
+       values= new ArrayList<>();
        values= inOrder(root());
-       
+
+       for( Node n :values ){
+           System.out.print("|"+n.getValue()+"");
+        }
+       System.out.println("");
       
        for(int i=0;i<values.size();i++){
            for(int j=0;j<values.size();j++){
