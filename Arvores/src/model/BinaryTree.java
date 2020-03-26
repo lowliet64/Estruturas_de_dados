@@ -177,13 +177,14 @@ public class BinaryTree implements Tree{
         }
     }
     
+    
     public void remove(int key, Node n){
         Node nodeout= find(key,root());
         Node rc;//pegará o filho direito (Right Child)
         Node lc;
         Node nop;//nodeout Parent
         Node lcr;//left child of right child of nodeout
-        //Caso tenha filho direito
+        //Caso seja filho externo
         if(isExternal(nodeout)){
             nop=nodeout.getParent();
             if(nodeout==nop.getLeftChild()){
@@ -196,28 +197,96 @@ public class BinaryTree implements Tree{
         
         }else{
             nop=nodeout.getParent();
+            
             if(hasRightChild(nodeout)){
                 //caso tenha filho direito
-                rc=nodeout.getLeftChild();
+                rc=nodeout.getRightChild();
                 
-               
-                if(hasLeftChild(rc)){
-                //caso o filho direito tenha filho esquerdo
-               
-                //altera o pai do filho esquerdo do rc
-                 rc.getLeftChild().setParent(nop);
-                 rc.setParent(rc.getLeftChild());
-                 rc.setLeftChild(null);
-                 
-                 //
+                //caso tenha os dois filhos
+                if(hasLeftChild(nodeout)){
+                    lc= nodeout.getLeftChild();
+                    
+                    if(hasLeftChild(rc)){
+                       lcr=rc.getLeftChild();
+                        
+                       while(hasLeftChild (lcr)){
+                    
+                           lcr=lcr.getLeftChild();
+                       }
+                       
+                       lcr.getParent().setLeftChild(null);
+                       if(hasRightChild(lcr)){
+                           lcr.getRightChild().setParent(lcr.getParent());
+                           
+                           lcr.getParent().setLeftChild(lcr.getRightChild());
+                         
+                       }
+                        
+                        lcr.setLeftChild(lc);
+                        
+                      
+                        lc.setParent(lcr);
+                        
+                        
+                        lcr.setRightChild(rc);
+                        rc.setParent(lcr);
+                        
+                        lcr.setParent(nop);
+                      
+                        if(nodeout==nop.getLeftChild()){
+                            nop.setLeftChild(lcr);
+                        }else{
+                            nop.setRightChild(lcr);
+                        
+                        }
+                       
+                        nodeout.setParent(null);
+                        nodeout.setLeftChild(null);
+                        nodeout.setRightChild(null);
+                       
+                     
+                       
+                        //
+                    }else{
+                        System.out.println("tem direito");
+                        //caso tenha esquerdo e direito mas o direito n tenha arvore esquerda
+                            rc.setParent(nop);
+                            rc.setLeftChild(lc);
+                            lc.setParent(rc);
+                            rc.setParent(nop);
+                            
+                            if(nodeout==nop.getLeftChild()){
+                                nop.setLeftChild(rc);
+                                nodeout.setParent(null);
+                            }else{
+                                nop.setRightChild(rc);
+                                nodeout.setParent(null);
+                            } 
+                        
+                    }
+                    
+                   
+
+
                  
                 }else{
-                
+                    System.out.println("so tem direito arrombardo");
+                     //caso só tenha direito
+                           
+                            rc.setParent(nop);
+                            if(nodeout==nop.getLeftChild()){
+                                nop.setLeftChild(rc);
+                                nodeout.setParent(null);
+                            }else{
+                                nop.setRightChild(rc);
+                                nodeout.setParent(null);
+                            }
                 }
            
             
             }else{
                  //caso só tenha esquerdo
+                 System.out.println("so tem esquerdo arrombardo");
                 lc=nodeout.getLeftChild();
                 lc.setParent(nop);
 
@@ -230,16 +299,23 @@ public class BinaryTree implements Tree{
                 }
             }
         }
+             
+                        nodeout.setParent(null);
+                        nodeout.setLeftChild(null);
+                        nodeout.setRightChild(null);
     }
    
     
     
    public ArrayList<Node> inOrder(Node n){
+       
        if(values==null){
-         values= new ArrayList<>();
+          values= new ArrayList<>();
+          System.out.println("esvaziei");
        }
        
        if(isInternal(n)){
+          
            if(hasLeftChild(n)){
                values= inOrder(n.getLeftChild());
            }
@@ -261,9 +337,7 @@ public class BinaryTree implements Tree{
        values= new ArrayList<>();
        values= inOrder(root());
 
-       for( Node n :values ){
-           System.out.print("|"+n.getValue()+"");
-        }
+       System.out.println("---------------------------------------------------------");
        System.out.println("");
       
        for(int i=0;i<values.size();i++){
@@ -282,7 +356,7 @@ public class BinaryTree implements Tree{
        
       
        
-   
+       values=null;
    }
     
 }
